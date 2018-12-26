@@ -44,7 +44,10 @@ module Twitter
        text: text,
        entities: {
            media: media
-       }}
+       },
+       extended_entities: {
+          media: media
+      }}
     end
 
     def extract_media(message_data)
