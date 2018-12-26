@@ -32,7 +32,9 @@ module Twitter
     def build_direct_message(attrs, text)
       recipient_id = attrs[:message_create][:target][:recipient_id].to_i
       sender_id = attrs[:message_create][:sender_id].to_i
-      media = attrs[:message_create][:message_data].nil? ? [] : attrs[:message_create][:message_data][:attachment]
+
+      media = extract_media(attrs[:message_create][:message_data])
+
       {id: attrs[:id].to_i,
        created_at: Time.at(attrs[:created_timestamp].to_i / 1000.0),
        sender: {id: sender_id},
@@ -41,8 +43,17 @@ module Twitter
        recipient_id: recipient_id,
        text: text,
        entities: {
-           media: media || []
+           media: media
        }}
+    end
+
+    def extract_media(message_data)
+      return [] if message_data.nil? or message_data[:attachment].nil?
+
+      media = []
+      attachment = attrs[:message_create][:message_data][:attachment]
+
+      media << attachment[:media] if attachment[:type] == "media"
     end
   end
 end
