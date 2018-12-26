@@ -48,12 +48,11 @@ module Twitter
     end
 
     def extract_media(message_data)
-      return [] if message_data.nil? or message_data[:attachment].nil?
-
       media = []
-      attachment = attrs[:message_create][:message_data][:attachment]
 
-      media << attachment[:media] if attachment[:type] == "media"
+      return media if message_data.nil? or message_data[:attachment].nil?
+
+      media << message_data[:attachment][:media] if message_data[:attachment][:type] == "media"
     end
   end
 end
