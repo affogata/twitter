@@ -9,8 +9,7 @@ module Twitter
     include Twitter::Enumerable
     include Twitter::Utils
     # @return [Hash]
-    attr_reader :attrs, :rate_limit
-    attr_reader :attrs
+    attr_reader :attrs, :rate_limit, :collection
     alias to_h attrs
     alias to_hash to_h
 
@@ -59,9 +58,18 @@ module Twitter
     def attrs=(attrs)
       @attrs = attrs
       @attrs.fetch(:results, []).collect do |tweet|
-        @collection << Tweet.new(tweet)
+        collection << Tweet.new(tweet)
       end
       @attrs
     end
+
+    def collection=(tweet)
+      @collection << Tweet.new(tweet)
+    end
+
+    def collection
+      @collection
+    end
+
   end
 end
