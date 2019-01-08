@@ -29,13 +29,13 @@ module Twitter
         Twitter::PremiumSearchResults.new(request)
       end
 
-      def premium_search(query, env, options = {})
-        options[:counts] ? search(query, '30day', env, options) : counts(query, '30day', env, options)
+      def premium_search(query, label, options = {})
+        options.delete(:counts) ? search(query, '30day', label, options) : counts(query, '30day', label, options)
 
       end
 
-      def full_archive_search(query, env, options = {})
-        options[:counts] ? search(query, 'fullarchive', env, options) : counts(query, 'fullarchive', env, options)
+      def full_archive_search(query, label, options = {})
+        options.delete(:counts) ? search(query, 'fullarchive', label, options) : counts(query, 'fullarchive', label, options)
       end
 
       # Returns counts from the 30-Day API that match a specified query.
@@ -56,7 +56,7 @@ module Twitter
         options = options.dup
         options[:request_method] ||= :post
         options[:request_body] = :json if options[:request_method] == :post
-        request = Twitter::REST::Request.new(self, options.delete(:request_method), "/1.1/tweets/search/#{endpoint}//#{label}/counts.json", options.merge(query: query))
+        request = Twitter::REST::Request.new(self, options.delete(:request_method), "/1.1/tweets/search/#{endpoint}/#{label}/counts.json", options.merge(query: query))
         Twitter::PremiumSearchCounts.new(request)
       end
     end
