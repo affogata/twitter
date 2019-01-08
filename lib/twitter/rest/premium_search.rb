@@ -8,8 +8,7 @@ module Twitter
       MAX_TWEETS_PER_REQUEST = 100
 
       def premium_search(query, label, options = {})
-        options.delete(:counts) == true ? search(query, '30day', label, options) : premium_search_counts(query, '30day', label, options)
-
+        search_premium(query, '30day', label, options)
       end
 
       def full_archive_search(query, label, options = {})
@@ -39,7 +38,7 @@ module Twitter
       end
 
       private
-      
+
       # Returns tweets from the 30-Day API that match a specified query.
       #
       # @see https://developer.twitter.com/en/docs/tweets/search/overview/premium
@@ -53,7 +52,7 @@ module Twitter
       # @option options [String] :fromDate The oldest UTC timestamp (from most recent 30 days) from which the Tweets will be provided. Date should be formatted as yyyymmddhhmm.
       # @option options [String] :toDate The latest, most recent UTC timestamp to which the activities will be provided. Date should be formatted as yyyymmddhhmm.
       # @return [Twitter::PremiumSearchResults] Return tweets that match a specified query with search metadata
-      def search(query, endpoint, label, options = {})
+      def search_premium(query, endpoint, label, options = {})
         options = options.dup
         options[:maxResults] ||= MAX_TWEETS_PER_REQUEST
         options[:request_method] ||= :post
