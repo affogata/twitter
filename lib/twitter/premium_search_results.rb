@@ -26,6 +26,10 @@ module Twitter
       self.attrs = request.perform
     end
 
+    def entries
+      @collection
+    end
+
     private
 
     # @return [Boolean]
@@ -61,10 +65,6 @@ module Twitter
         @collection << Tweet.new(tweet)
       end
       @attrs
-    end
-
-    def entries
-      @collection
     end
 
   end
