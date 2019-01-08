@@ -9,7 +9,8 @@ module Twitter
     include Twitter::Enumerable
     include Twitter::Utils
     # @return [Hash]
-    attr_reader :attrs, :rate_limit, :collection
+    attr_reader :attrs, :rate_limit
+    attr_accessor :collection
     alias to_h attrs
     alias to_hash to_h
 
@@ -48,7 +49,7 @@ module Twitter
 
     # @return [Hash]
     def fetch_next_page
-      @options[:request_body] = :json if @request_method == :post
+      @options[:request_body] = :json if @request_method == :json_post
       response = Twitter::REST::Request.new(@client, @request_method, @path, @options.merge(next_page)).perform
       self.attrs = response
     end
@@ -58,7 +59,7 @@ module Twitter
     def attrs=(attrs)
       @attrs = attrs
       @attrs.fetch(:results, []).collect do |tweet|
-        collection << Tweet.new(tweet)
+        collection << tweet
       end
       @attrs
     end
