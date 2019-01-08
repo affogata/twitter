@@ -6,14 +6,7 @@ module Twitter
   module REST
     module PremiumSearch
       MAX_TWEETS_PER_REQUEST = 100
-
-      def premium_search(query, label, options = {})
-        search_premium(query, '30day', label, options)
-      end
-
-      def full_archive_search(query, label, options = {})
-        options.delete(:counts) == true ? search(query, 'fullarchive', label, options) : premium_search_counts(query, 'fullarchive', label, options)
-      end
+      DEFAULT_PRODUCT = '30day'
 
       # Returns counts from the 30-Day API that match a specified query.
       #
@@ -29,15 +22,13 @@ module Twitter
       # @option options [String] :bucket The unit of time for which count data will be provided ("day", "hour", "minute").
       # @option options [String] :next This parameter is used to get the next 'page' of results.
       # @return [Twitter::PremiumSearchCounts] Return counts (data volumes) data for the specified query
-      def premium_search_counts(query, endpoint, label, options = {})
+      def premium_search_counts(query, label, options = {})
         options = options.dup
-        options[:request_method] ||= :post
-        options[:request_body] = :json if options[:request_method] == :post
-        request = Twitter::REST::Request.new(self, options.delete(:request_method), "/1.1/tweets/search/#{endpoint}/#{label}/counts.json", options.merge(query: query))
+        product = options.delete(:product) || DEFAULT_PRODUCT
+        options[:request_method] ||= :json_post
+        request = Twitter::REST::Request.new(self, options.delete(:request_method), "/1.1/tweets/search/#{product}/#{label}/counts.json", options.merge(query: query))
         Twitter::PremiumSearchCounts.new(request)
       end
-
-      private
 
       # Returns tweets from the 30-Day API that match a specified query.
       #
@@ -52,13 +43,21 @@ module Twitter
       # @option options [String] :fromDate The oldest UTC timestamp (from most recent 30 days) from which the Tweets will be provided. Date should be formatted as yyyymmddhhmm.
       # @option options [String] :toDate The latest, most recent UTC timestamp to which the activities will be provided. Date should be formatted as yyyymmddhhmm.
       # @return [Twitter::PremiumSearchResults] Return tweets that match a specified query with search metadata
-      def search_premium(query, endpoint, label, options = {})
+      def premium_search(query, label, options = {})
         options = options.dup
+        product = options.delete(:product) || DEFAULT_PRODUCT
         options[:maxResults] ||= MAX_TWEETS_PER_REQUEST
-        options[:request_method] ||= :post
-        options[:request_body] = :json if options[:request_method] == :post
-        request = Twitter::REST::Request.new(self, options.delete(:request_method), "/1.1/tweets/search/#{endpoint}/#{label}.json", options.merge(query: query))
+        options[:request_method] ||= :json_post
+        request = Twitter::REST::Request.new(self, options.delete(:request_method), "/1.1/tweets/search/#{product}/#{label}.json", options.merge(query: query))
         Twitter::PremiumSearchResults.new(request)
+      end
+
+      def full_archive_search(query, label, options = {})
+        premium_search(query, label, options.merge(product: 'fullarchive'))
+      end
+
+      def full_archive_counts(query, label, options = {})
+        premium_search_counts(query, label, options.merge(product: 'fullarchive'))
       end
     end
   end
