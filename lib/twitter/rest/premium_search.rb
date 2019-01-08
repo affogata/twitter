@@ -30,11 +30,12 @@ module Twitter
       end
 
       def premium_search(query, env, options = {})
-        search(query, '30day', env, options)
+        options[:counts] ? search(query, '30day', env, options) : counts(query, '30day', env, options)
+
       end
 
       def full_archive_search(query, env, options = {})
-        search(query, 'fullarchive', env, options)
+        options[:counts] ? search(query, 'fullarchive', env, options) : counts(query, 'fullarchive', env, options)
       end
 
       # Returns counts from the 30-Day API that match a specified query.
