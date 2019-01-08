@@ -30,12 +30,12 @@ module Twitter
       end
 
       def premium_search(query, label, options = {})
-        options.delete(:counts) ? search(query, '30day', label, options) : counts(query, '30day', label, options)
+        options.delete(:counts) == true ? search(query, '30day', label, options) : premium_search_counts(query, '30day', label, options)
 
       end
 
       def full_archive_search(query, label, options = {})
-        options.delete(:counts) ? search(query, 'fullarchive', label, options) : counts(query, 'fullarchive', label, options)
+        options.delete(:counts) == true ? search(query, 'fullarchive', label, options) : premium_search_counts(query, 'fullarchive', label, options)
       end
 
       # Returns counts from the 30-Day API that match a specified query.
@@ -52,7 +52,7 @@ module Twitter
       # @option options [String] :bucket The unit of time for which count data will be provided ("day", "hour", "minute").
       # @option options [String] :next This parameter is used to get the next 'page' of results.
       # @return [Twitter::PremiumSearchCounts] Return counts (data volumes) data for the specified query
-      def counts(query, endpoint, label, options = {})
+      def premium_search_counts(query, endpoint, label, options = {})
         options = options.dup
         options[:request_method] ||= :post
         options[:request_body] = :json if options[:request_method] == :post
