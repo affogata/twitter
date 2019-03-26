@@ -56,7 +56,7 @@ module Twitter
         if %i[multipart_post json_post].include?(request_method)
           merge_multipart_file!(options) if request_method == :multipart_post
           @request_method = :post
-          @headers = Twitter::Headers.new(@client, @request_method, @uri, options.dup).request_headers
+          @headers = Twitter::Headers.new(@client, @request_method, @uri, :bearer_token_request => options[:bearer_token_request]).request_headers
         elsif %i[json_put].include?(request_method)
           @request_method = :put
           @headers = Twitter::Headers.new(@client, @request_method, @uri).request_headers
