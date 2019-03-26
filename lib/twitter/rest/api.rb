@@ -16,6 +16,7 @@ require 'twitter/rest/trends'
 require 'twitter/rest/tweets'
 require 'twitter/rest/undocumented'
 require 'twitter/rest/users'
+require 'twitter/rest/engagements'
 
 module Twitter
   module REST
