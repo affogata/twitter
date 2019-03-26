@@ -34,7 +34,7 @@ module Twitter
       def enterprise_search_counts(query, label, options = {})
         options = options.dup
         product = options.delete(:product) || DEFAULT_PRODUCT
-        options[:request_method] ||= :post
+        options[:request_method] ||= :json_post
         request = Twitter::REST::Request.new(self, options.delete(:request_method), "#{ENTERPRISE_BASE_URL}/search/#{product}/accounts/#{account_name}/#{label}/counts", options.merge(query: query))
         Twitter::PremiumSearchCounts.new(request)
       end
