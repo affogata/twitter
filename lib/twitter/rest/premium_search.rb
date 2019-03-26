@@ -34,7 +34,7 @@ module Twitter
       def enterprise_search_counts(query, label, options = {})
         options = options.dup
         product = options.delete(:product) || DEFAULT_PRODUCT
-        options[:request_method] ||= :json_post
+        options[:request_method] ||= :post
         request = Twitter::REST::Request.new(self, options.delete(:request_method), "#{ENTERPRISE_BASE_URL}/search/#{product}/accounts/#{account_name}/#{label}/counts", options.merge(query: query))
         Twitter::PremiumSearchCounts.new(request)
       end
@@ -75,11 +75,13 @@ module Twitter
       # @option options [String] :toDate The latest, most recent UTC timestamp to which the activities will be provided. Date should be formatted as yyyymmddhhmm.
       # @return [Twitter::PremiumSearchResults] Return tweets that match a specified query with search metadata
       def enterprise_search(query, account_name, label, options = {})
+        client = Twitter::REST::Client.new(:consumer_key => options.delete(:consumer_key), :consumer_secret => options.delete(:consumer_secret))
         options = options.dup
         product = options.delete(:product) || DEFAULT_PRODUCT
         options[:maxResults] ||= MAX_TWEETS_PER_REQUEST
-        options[:request_method] ||= :json_post
-        request = Twitter::REST::Request.new(self, options.delete(:request_method), "#{ENTERPRISE_BASE_URL}/search/#{product}/accounts/#{account_name}/prod.json", options.merge(query: query))
+        options[:request_method] ||= :post
+        options[:bearer_token_request] = true
+        request = Twitter::REST::Request.new(client, options.delete(:request_method), "#{ENTERPRISE_BASE_URL}/search/#{product}/accounts/#{account_name}/prod.json", options.merge(query: query))
         Twitter::PremiumSearchResults.new(request)
       end
 
