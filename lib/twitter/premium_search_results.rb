@@ -19,7 +19,7 @@ module Twitter
     # @return [Twitter::PremiumSearchResults]
     def initialize(request)
       @client = request.client
-      @request_method = request.verb
+      @request_method = :json_post # request.verb
       @path = request.path
       @options = request.options
       @collection = []
