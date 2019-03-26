@@ -37,7 +37,7 @@ module Twitter
         product = options.delete(:product) || DEFAULT_PRODUCT
         options[:request_method] ||= :json_post
         options[:bearer_token_request] = true
-        request = Twitter::REST::Request.new(self, options.delete(:request_method), "#{ENTERPRISE_BASE_URL}/search/#{product}/accounts/#{account_name}/#{label}/counts.json", options.merge(query: query))
+        request = Twitter::REST::Request.new(client, options.delete(:request_method), "#{ENTERPRISE_BASE_URL}/search/#{product}/accounts/#{account_name}/#{label}/counts.json", options.merge(query: query))
         Twitter::PremiumSearchCounts.new(request)
       end
 
