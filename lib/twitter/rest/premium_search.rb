@@ -79,7 +79,7 @@ module Twitter
         product = options.delete(:product) || DEFAULT_PRODUCT
         options[:maxResults] ||= MAX_TWEETS_PER_REQUEST
         options[:request_method] ||= :json_post
-        request = Twitter::REST::Request.new(self, options.delete(:request_method), "#{ENTERPRISE_BASE_URL}/search/#{product}/accounts/#{account_name}/#{label}", options.merge(query: query))
+        request = Twitter::REST::Request.new(self, options.delete(:request_method), "#{ENTERPRISE_BASE_URL}/search/#{product}/accounts/#{account_name}/prod.json", options.merge(query: query))
         Twitter::PremiumSearchResults.new(request)
       end
 
