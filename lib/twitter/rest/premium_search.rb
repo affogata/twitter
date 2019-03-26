@@ -31,11 +31,13 @@ module Twitter
         Twitter::PremiumSearchCounts.new(request)
       end
 
-      def enterprise_search_counts(query, label, options = {})
+      def enterprise_search_counts(query, account_name, label, options = {})
+        client = Twitter::REST::Client.new(:consumer_key => options.delete(:consumer_key), :consumer_secret => options.delete(:consumer_secret))
         options = options.dup
         product = options.delete(:product) || DEFAULT_PRODUCT
         options[:request_method] ||= :json_post
-        request = Twitter::REST::Request.new(self, options.delete(:request_method), "#{ENTERPRISE_BASE_URL}/search/#{product}/accounts/#{account_name}/#{label}/counts", options.merge(query: query))
+        options[:bearer_token_request] = true
+        request = Twitter::REST::Request.new(self, options.delete(:request_method), "#{ENTERPRISE_BASE_URL}/search/#{product}/accounts/#{account_name}/#{label}/counts.json", options.merge(query: query))
         Twitter::PremiumSearchCounts.new(request)
       end
 
@@ -81,7 +83,7 @@ module Twitter
         options[:maxResults] ||= MAX_TWEETS_PER_REQUEST
         options[:request_method] ||= :json_post
         options[:bearer_token_request] = true
-        request = Twitter::REST::Request.new(client, options.delete(:request_method), "#{ENTERPRISE_BASE_URL}/search/#{product}/accounts/#{account_name}/Prod.json", options.merge(query: query))
+        request = Twitter::REST::Request.new(client, options.delete(:request_method), "#{ENTERPRISE_BASE_URL}/search/#{product}/accounts/#{account_name}/#{label}.json", options.merge(query: query))
         Twitter::PremiumSearchResults.new(request)
       end
 
