@@ -31,6 +31,7 @@ module Twitter
       include Twitter::REST::OAuth
       include Twitter::REST::PlacesAndGeo
       include Twitter::REST::PremiumSearch
+      include Twitter::REST::Engagements
       include Twitter::REST::SavedSearches
       include Twitter::REST::Search
       include Twitter::REST::SpamReporting
