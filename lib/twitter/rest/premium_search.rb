@@ -7,7 +7,7 @@ module Twitter
     module PremiumSearch
       MAX_TWEETS_PER_REQUEST = 100
       DEFAULT_PRODUCT = '30day'
-      ENTERPRISE_BASE_URL = "https://gnip-api.twitter.com/search".freeze
+      ENTERPRISE_BASE_URL = "https://gnip-api.twitter.com".freeze
 
       # Returns counts from the 30-Day API that match a specified query.
       #
