@@ -58,9 +58,10 @@ module Twitter
       def tweet_engagements(product, tweets, options = {})
         options = options.dup
         options[:tweet_ids] = tweets
-        options[:engagement_types] ||= ["impressions", "engagements", "favorites", "retweets", "replies", "video_views"]
+        options[:engagement_types] ||= ["favorites","retweets","replies","video_views"]
+        options[:groupings] ||= {"perTweetMetricsUnowned" => {"group_by" => ["tweet.id","engagement.type"]}
         options[:request_method] ||= :json_post
-        options[:headers] = {'Accept-Encoding' => 'gzip', 'content-type' => 'application/json'}
+        options[:headers] = {'Accept-Encoding' => 'gzip', 'Content-Type' => 'application/json'}
         Twitter::REST::Request.new(self, options.delete(:request_method), "#{BASE_URL}/insights/engagement/#{product}", options)
       end
     end
