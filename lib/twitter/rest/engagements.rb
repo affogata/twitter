@@ -18,7 +18,7 @@ module Twitter
       # @option options [Hash] :groupings Results from the Engagement API can be returned in different groups to best fit your needs. You can include a maximum of 3 groupings per request
       # @return [Twitter::TotalEngagements] Return insights objects for the retrieved engagements
       def tweet_engagements_totals(tweets, options = {})
-        Twitter::Insights::TotalEngagements.new(engagements('totals', tweets, options))
+        Twitter::Insights::TotalEngagements.new(tweet_engagements('totals', tweets, options))
       end
 
       # Returns a set of insights from the Enterprise Engagements API for the last 28 hours
@@ -34,7 +34,7 @@ module Twitter
       # @return [Twitter::Hr28Engagements] Return insights objects for the retrieved engagements
       def tweet_engagements_hr28(tweets, options = {})
         options[:engagement_types] ||= ["impressions", "engagements", "favorites", "retweets", "replies", "media_views", "media_engagements", "url_clicks", "hashtag_clicks", "detail_expands", "permalink_clicks", "app_install_attempts", "app_opens", "email_tweet", "user_follows", "user_profile_clicks"]
-        Twitter::Insights::Hr28Engagements.new(engagements('28hr', tweets, options))
+        Twitter::Insights::Hr28Engagements.new(tweet_engagements('28hr', tweets, options))
       end
 
       # Returns a set of insights from the Enterprise Engagements API with bounded time-frame
@@ -52,7 +52,7 @@ module Twitter
       # @return [Twitter::HistoricalEngagements] Return insights objects for the retrieved engagements
       def tweet_engagements_historical(tweets, options = {})
         options[:engagement_types] ||= ["impressions", "engagements", "favorites", "retweets", "replies", "media_views", "media_engagements", "url_clicks", "hashtag_clicks", "detail_expands", "permalink_clicks", "app_install_attempts", "app_opens", "email_tweet", "user_follows", "user_profile_clicks"]
-        Twitter::Insights::HistoricalEngagements.new(engagements('historical', tweets, options))
+        Twitter::Insights::HistoricalEngagements.new(tweet_engagements('historical', tweets, options))
       end
 
       def tweet_engagements(product, tweets, options = {})
