@@ -60,7 +60,7 @@ module Twitter
         options[:tweet_ids] = tweets
         options[:engagement_types] ||= ["impressions", "engagements", "favorites", "retweets", "replies", "video_views"]
         options[:request_method] ||= :json_post
-        options[:headers] = {'Accept-Encoding' => 'gzip'}
+        options[:headers] = {'Accept-Encoding' => 'gzip', 'Content-Type' => 'application/json'}
         Twitter::REST::Request.new(self, options.delete(:request_method), "#{BASE_URL}/insights/engagement/#{product}", options)
       end
     end
