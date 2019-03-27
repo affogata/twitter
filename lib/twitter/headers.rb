@@ -20,8 +20,7 @@ module Twitter
       SimpleOAuth::Header.new(@request_method, @uri, @options, @client.credentials.merge(ignore_extra_keys: true))
     end
 
-    def request_headers
-      headers = {}
+    def request_headers(headers={})
       headers[:user_agent] = @client.user_agent
       if bearer_token_request?
         headers[:accept]        = '*/*'

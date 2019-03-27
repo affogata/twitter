@@ -53,16 +53,17 @@ module Twitter
       end
 
       def set_multipart_options!(request_method, options)
+        headers = options.delete(:headers)
         if %i[multipart_post json_post].include?(request_method)
           merge_multipart_file!(options) if request_method == :multipart_post
           @request_method = :post
-          @headers = Twitter::Headers.new(@client, @request_method, @uri, :bearer_token_request => options.delete(:bearer_token_request)).request_headers
+          @headers = Twitter::Headers.new(@client, @request_method, @uri, :bearer_token_request => options.delete(:bearer_token_request)).request_headers(headers)
         elsif %i[json_put].include?(request_method)
           @request_method = :put
-          @headers = Twitter::Headers.new(@client, @request_method, @uri).request_headers
+          @headers = Twitter::Headers.new(@client, @request_method, @uri).request_headers(headers)
         else
           @request_method = request_method
-          @headers = Twitter::Headers.new(@client, @request_method, @uri, options).request_headers
+          @headers = Twitter::Headers.new(@client, @request_method, @uri, options).request_headers(headers)
         end
       end
 

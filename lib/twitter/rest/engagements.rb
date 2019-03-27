@@ -17,7 +17,7 @@ module Twitter
       # @option options [Array] :engagement_types An array that includes the types of engagement metrics to be queried. The Totals endpoint supports only the following engagement types: impressions, engagements, favorites, retweets, replies, video_views.
       # @option options [Hash] :groupings Results from the Engagement API can be returned in different groups to best fit your needs. You can include a maximum of 3 groupings per request
       # @return [Twitter::TotalEngagements] Return insights objects for the retrieved engagements
-      def totals(tweets, options = {})
+      def tweet_engagements_totals(tweets, options = {})
         Twitter::Insights::TotalEngagements.new(engagements('totals', tweets, options))
       end
 
@@ -32,7 +32,7 @@ module Twitter
       # @option options [Array] :engagement_types An array that includes the types of engagement metrics to be queried. The Totals endpoint supports only the following engagement types: impressions, engagements, favorites, retweets, replies, video_views.
       # @option options [Hash] :groupings Results from the Engagement API can be returned in different groups to best fit your needs. You can include a maximum of 3 groupings per request
       # @return [Twitter::Hr28Engagements] Return insights objects for the retrieved engagements
-      def hr28(tweets, options = {})
+      def tweet_engagements_hr28(tweets, options = {})
         options[:engagement_types] ||= ["impressions", "engagements", "favorites", "retweets", "replies", "media_views", "media_engagements", "url_clicks", "hashtag_clicks", "detail_expands", "permalink_clicks", "app_install_attempts", "app_opens", "email_tweet", "user_follows", "user_profile_clicks"]
         Twitter::Insights::Hr28Engagements.new(engagements('28hr', tweets, options))
       end
@@ -50,19 +50,18 @@ module Twitter
       # @option options [String] :start A start date or datetime string can be supplied to limit the scope of the engagements retrieval
       # @option options [String] :end An end date or datetime string can be supplied to limit the scope of the engagements retrieval
       # @return [Twitter::HistoricalEngagements] Return insights objects for the retrieved engagements
-      def historical(tweets, options = {})
+      def tweet_engagements_historical(tweets, options = {})
         options[:engagement_types] ||= ["impressions", "engagements", "favorites", "retweets", "replies", "media_views", "media_engagements", "url_clicks", "hashtag_clicks", "detail_expands", "permalink_clicks", "app_install_attempts", "app_opens", "email_tweet", "user_follows", "user_profile_clicks"]
         Twitter::Insights::HistoricalEngagements.new(engagements('historical', tweets, options))
       end
 
-      private
-
-      def engagements(product, tweets, options = {})
+      def tweet_engagements(product, tweets, options = {})
         options = options.dup
         options[:tweet_ids] = tweets
         options[:engagement_types] ||= ["impressions", "engagements", "favorites", "retweets", "replies", "video_views"]
         options[:request_method] ||= :json_post
-        Twitter::REST::Request.new(self, options.delete(:request_method), "#{BASE_URL}/insights/engagement/#{product}", options)
+        options[:headers] = {'Accept-Encoding' => 'gzip'}
+        Twitter::REST::Request.new(self, options.delete(:request_method), "#{BASE_URL}/insights/engagement/#{product}.json", options)
       end
     end
   end
