@@ -3,10 +3,13 @@ require 'http'
 require 'http/form_data'
 require 'json'
 require 'openssl'
+require 'zlib'
+require 'stringio'
 require 'twitter/error'
 require 'twitter/headers'
 require 'twitter/rate_limit'
 require 'twitter/utils'
+
 
 module Twitter
   module REST
@@ -34,7 +37,12 @@ module Twitter
       # @return [Array, Hash]
       def perform
         response = http_client.headers(@headers).public_send(@request_method, @uri.to_s, @options_key => @options)
-        response_body = response.body.empty? ? '' : symbolize_keys!(response.parse)
+        if @headers['Accept-Encoding'] == 'gzip'
+          response_body = decode_gzip!(response)
+        else
+          response_body = response.body.empty? ? '' : symbolize_keys!(response.parse)
+        end
+
         response_headers = response.headers
         fail_or_return_response_body(response.code, response_body, response_headers)
       end
@@ -65,6 +73,13 @@ module Twitter
           @request_method = request_method
           @headers = Twitter::Headers.new(@client, @request_method, @uri, options).request_headers(headers)
         end
+      end
+
+      def decode_gzip!(response)
+        return '' if response.body.empty?
+
+        gz = Zlib::GzipReader.new(StringIO.new(resp.body.to_s))
+        return symbolize_keys!(JSON.parse(gz.read))
       end
 
       def content_type(basename)
