@@ -33,9 +33,6 @@ module Twitter
       # @return [Hash]
       def attrs=(attrs)
         @attrs = attrs
-        @attrs.fetch(:statuses, []).collect do |tweet|
-          @collection << Tweet.new(tweet)
-        end
         @attrs
       end
 

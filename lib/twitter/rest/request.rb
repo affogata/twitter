@@ -79,7 +79,7 @@ module Twitter
         return '' if response.body.empty?
 
         gz = Zlib::GzipReader.new(StringIO.new(response.body.to_s))
-        @options_key == :json ? symbolize_keys!(JSON.parse(gz.read)) : gz.read
+        @options_key == :json ? JSON.parse(gz.read) : gz.read # avoid symbolizing keys
       end
 
       def content_type(basename)
