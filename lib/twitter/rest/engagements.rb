@@ -61,7 +61,6 @@ module Twitter
         options[:engagement_types] ||= ["favorites","retweets","replies","video_views"]
         options[:groupings] ||= {"perTweetMetricsUnowned" => {"group_by" => ["tweet.id","engagement.type"]}}
         options[:request_method] ||= :json_post
-        options[:bearer_token_request] = true
         options[:headers] = {'Accept-Encoding' => 'gzip', 'Content-Type' => 'application/json'}
         Twitter::REST::Request.new(self, options.delete(:request_method), "#{BASE_URL}/insights/engagement/#{product}", options)
       end
