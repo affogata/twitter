@@ -62,6 +62,7 @@ module Twitter
 
       def set_multipart_options!(request_method, options)
         headers = options.delete(:headers)
+        headers = headers ||= {}
         if %i[multipart_post json_post].include?(request_method)
           merge_multipart_file!(options) if request_method == :multipart_post
           @request_method = :post
