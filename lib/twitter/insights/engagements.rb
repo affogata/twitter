@@ -10,7 +10,7 @@ module Twitter
       include Twitter::Enumerable
       include Twitter::Utils
       # @return [Hash]
-      attr_reader :attrs, :rate_limit, :entries
+      attr_reader :attrs, :rate_limit, :entries, :unavailable_tweet_ids
       alias to_h attrs
       alias to_hash to_h
 
@@ -34,6 +34,10 @@ module Twitter
       def attrs=(attrs)
         @attrs = attrs
         @attrs
+      end
+
+      def unavailable_tweet_ids
+        @attrs['unavailable_tweet_ids'] || []
       end
 
       # Converts query string to a hash
