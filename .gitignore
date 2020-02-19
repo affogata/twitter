@@ -9,5 +9,4 @@ doc/*
 log/*
 measurement/*
 pkg/*
-/.idea/workspace.xml
-/.idea/twitter.iml
+/.idea/*
