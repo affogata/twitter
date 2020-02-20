@@ -11,9 +11,7 @@ module Twitter
     module Utils
       include Twitter::Utils
       DEFAULT_CURSOR = -1
-
-    private
-
+      
       # Take a URI string or Twitter::Identity object and return its ID
       #
       # @param object [Integer, String, URI, Twitter::Identity] An ID, URI, or object.
