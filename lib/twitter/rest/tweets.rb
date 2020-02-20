@@ -323,6 +323,11 @@ module Twitter
         end.compact
       end
 
+      def hide(status_id)
+        options = {hidden: true, headers: {"content-type" => "application/json"}}
+        perform_request(:json_put , "/labs/1/tweets/#{status_id}/hidden", options)
+      end
+
     private
 
       def array_wrap(object)
