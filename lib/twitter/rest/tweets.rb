@@ -325,7 +325,7 @@ module Twitter
 
       def hide(status_id, hidden=true)
         options = {hidden: hidden, headers: {"content-type" => "application/json"}}
-        perform_request(:json_put , "/labs/2/tweets/#{status_id}/hidden", options)
+        perform_request(:json_put , "2/tweets/#{status_id}/hidden", options)
       end
 
     private
