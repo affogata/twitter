@@ -328,6 +328,14 @@ module Twitter
         perform_request(:json_put , "/2/tweets/#{status_id}/hidden", options)
       end
 
+      def tweet(status_id, options = {})
+        perform_request(:get , "/2/tweets/#{status_id}", options)
+      end
+
+      def tweets(status_ids, options = {})
+        perform_request(:get , "/2/tweets?ids=#{status_ids}", options)
+      end
+
     private
 
       def array_wrap(object)
