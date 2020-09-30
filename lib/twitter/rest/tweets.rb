@@ -333,6 +333,8 @@ module Twitter
       end
 
       def tweets(status_ids, options = {})
+        status_ids = (status_ids.is_a?(String)) ? status_ids.gsub(' ', '') : Array.wrap(status_ids).join(',')
+
         perform_request(:get , "/2/tweets?ids=#{status_ids}", options)
       end
 
